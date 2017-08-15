@@ -31,7 +31,8 @@ nginx_src_modules:
   - name: ngx_pagespeed
     url: https://github.com/pagespeed/ngx_pagespeed/archive/v1.12.34.2-stable.tar.gz
     dynamic: true # will use --add-dynamic-module and copy the compiled module to nginx installation folder
-    deps: # module dependencies to download 
+     # module dependencies to download and add to build path
+    deps:
       - name: psol
         url: https://dl.google.com/dl/page-speed/psol/1.12.34.2-x64.tar.gz
 
