@@ -1,0 +1,18 @@
+---
+
+- include: check.yml
+  
+- include: deps.yml
+  when: _nginx_src_changed
+  
+- include: modules.yml
+  when: _nginx_src_changed
+  
+- include: build.yml
+  when: _nginx_src_changed
+  
+- include: install.yml
+  when: _nginx_src_changed
+
+- include: cleanup.yml
+  when: _nginx_src_changed and nginx_src_cleanup|default(False)

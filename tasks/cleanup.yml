@@ -1,0 +1,4 @@
+---
+
+- name: Clean build directory
+  file: path="{{ nginx_src_build_path }}" state=absent

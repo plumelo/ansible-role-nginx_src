@@ -1,0 +1,11 @@
+---
+- name: Install nginx package
+  apt: deb="{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~xenial_amd64.deb" force=yes
+
+- name: Hold installed nginx
+  dpkg_selections: name=nginx selection=hold
+
+- name: Install modules
+  copy: src="{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/objs/{{ item.name }}.so" dest="/etc/nginx/modules/" remote_src=yes
+  when: item.dynamic|default(False)
+  with_items: "{{ nginx_src_modules }}"

@@ -1,0 +1,10 @@
+---
+- name: Build dependencies
+  apt: pkg=nginx state=build-dep
+  
+- name: Build
+  shell: 'yes | dpkg-buildpackage -b'
+  register: dpkg_bp_cmd
+  args:
+    creates: '{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~xenial_amd64.deb'
+    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'

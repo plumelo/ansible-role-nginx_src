@@ -1,0 +1,15 @@
+---
+- name: Check if nginx is installed
+  command: dpkg -s nginx
+  register: nginx_dpkg_check
+  changed_when: not ("hold ok installed" in nginx_dpkg_check.stdout and nginx_src_version in nginx_dpkg_check.stdout)
+  failed_when: no 
+
+- name: Check nginx compile args
+  command: nginx -V
+  register: nginx_args_check
+  changed_when: not _nginx_src_args in nginx_args_check.stdout|default('')
+  failed_when: no
+
+- name: Set fact for nginx install status
+  set_fact: _nginx_src_changed="{{ nginx_dpkg_check.changed and nginx_args_check.changed }}"
