@@ -1,5 +1,11 @@
-nginx_src_version: 1.13.3
+nginx_src_version: 1.13.4
 nginx_src_build_path: '/root/nginx-src'
+
+_nginx_src_deps:
+  - dpkg-dev
+  - build-essential
+
+nginx_src_deps: []
 
 nginx_src_modules: []
 nginx_src_args: []
