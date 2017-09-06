@@ -7,22 +7,19 @@
   apt_repository: repo="deb http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx" update_cache=yes
 - name: Ensure APT official nginx repository (mainline)
   apt_repository: repo="deb-src http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx" update_cache=yes
-  
+
 
 - name: Install deps
   apt: name='{{ item }}' state=present
-  with_items:
-    - dpkg-dev
-    - build-essential
-    - unzip
-    
+  with_items: "{{ _nginx_src_deps + nginx_src_deps }}"
+
 - name: Create build directory
   file: path="{{ nginx_src_build_path }}" state=directory owner=_apt group=root mode=0775
-  
+
 - name: Create build modules directories
   file: path="{{ nginx_src_build_path }}/{{ item.name }}" state=directory owner=_apt group=root mode=0775
   with_items: "{{ nginx_src_modules }}"
-  
+
 - name: Create build modules deps directories (if any)
   file: path="{{ nginx_src_build_path }}/{{ item.0.name }}/{{ item.1.name }}" state=directory owner=_apt group=root mode=0775
   with_subelements:
@@ -34,5 +31,7 @@
   command: 'apt source nginx={{ nginx_src_version }}'
   register: apt_src_cmd
   changed_when: apt_src_cmd.stdout.find('already downloaded file') < 0
+  env:
+    LC_ALL: 'en_US.UTF-8'
   args:
     chdir: "{{ nginx_src_build_path }}"
