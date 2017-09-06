@@ -13,13 +13,14 @@
 - name: Modify debian rules to build with modules
   lineinfile:
     path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
-    regexp: 'CFLAGS(.+)stream_ssl_preread_module \-\-with-cc-opt(.+)"$'
-    line: 'CFLAGS\1stream_ssl_preread_module {{ _nginx_src_args }} --with-cc-opt\2"'
+    regexp: 'CFLAGS(.+)stream_ssl_preread_module(.+?)\-\-with\-cc\-opt(.+)"$'
+    line: 'CFLAGS\1stream_ssl_preread_module {{ _nginx_src_args }} --with-cc-opt\3"'
     backrefs: yes
+  register: deb_rules_register
 
 - name: Modify debian rules to build with modules
   lineinfile:
     path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
-    regexp: 'CFLAGS(.+)stream_ssl_preread_module \-\-with-cc-opt(.+)debug$'
-    line: 'CFLAGS\1stream_ssl_preread_module {{ _nginx_src_args }} --with-cc-opt\2debug'
+    regexp: 'CFLAGS(.+)stream_ssl_preread_module(.+?)\-\-with\-cc\-opt(.+)debug$'
+    line: 'CFLAGS\1stream_ssl_preread_module {{ _nginx_src_args }} --with-cc-opt\3debug'
     backrefs: yes
