@@ -6,7 +6,7 @@
   failed_when: no
 
 - name: Check nginx compile args
-  command: nginx -V
+  shell: nginx -V
   register: nginx_args_check
   changed_when: not (_nginx_src_args in nginx_args_check.stdout or _nginx_src_args in nginx_args_check.stderr)
   failed_when: no
