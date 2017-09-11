@@ -1,4 +1,7 @@
 ---
+- name: List folders
+  shell: ls -al {{ nginx_src_build_path }}/
+
 - name: Install nginx package
   apt: deb="{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~xenial_amd64.deb" force=yes
 
