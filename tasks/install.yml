@@ -3,7 +3,7 @@
   shell: ls -al {{ nginx_src_build_path }}/
 
 - name: Install nginx package
-  amdpt: deb="{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~{{ ansible_distribution_release }}_amd64.deb" force=yes
+  apt: deb="{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~{{ ansible_distribution_release }}_amd64.deb" force=yes
 
 - name: Hold installed nginx
   dpkg_selections: name=nginx selection=hold
