@@ -5,7 +5,7 @@ This role installs the nginx web server from sources from nginx mainline reposit
 the nginx version and the nginx modules to fetch and compile.
 
 [![Build Status](https://travis-ci.org/plumelo/ansible-role-nginx_src.svg?branch=master)](https://travis-ci.org/plumelo/ansible-role-nginx_src)
-[![Ansible Galaxy](https://img.shields.io/badge/style-plumelo.nginx-blue.svg?style=flat&label=role&test=plumelo.nginx)](https://galaxy.ansible.com/plumelo/nginx/)
+[![Ansible Galaxy](https://img.shields.io/badge/style-plumelo.nginx-blue.svg?style=flat&label=role&test=plumelo.nginx_scr)](https://galaxy.ansible.com/plumelo/nginx_src/)
 
 Install
 -------
