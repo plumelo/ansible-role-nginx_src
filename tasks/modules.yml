@@ -10,6 +10,26 @@
     - deps
     - skip_missing: true
 
+- name: Nginx preconfigure
+  shell: ./configure
+  args:
+    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
+  when: nginx_preconfigure
+
+- name: Configure modules
+  shell: "./configure {{ item.make.configure }}"
+  args:
+    chdir: '{{ nginx_src_build_path}}/{{  item.name }}'
+  with_items: "{{ nginx_src_modules }}"
+  when: item.make is defined and item.make.configure|default(False)
+
+- name: Compile
+  make:
+    chdir: '{{ nginx_src_build_path }}/{{ item.name }}'
+    target: install
+  with_items: "{{ nginx_src_modules }}"
+  when: item.make is defined and item.make.install|default(false)
+
 - name: Modify debian rules to build with modules
   lineinfile:
     path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
@@ -23,4 +43,18 @@
     path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
     regexp: 'CFLAGS="(.*?)"(.+)stream_ssl_preread_module(.+?)\-\-with\-cc\-opt(.+)debug$'
     line: 'CFLAGS="{{ nginx_src_cflags}}"\2stream_ssl_preread_module {{ _nginx_src_args }} --with-cc-opt\4debug'
+    backrefs: yes
+
+- name: Modify debian rules to cleanup build folders
+  lineinfile:
+    path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
+    regexp: '(.+?)rm \-r?f \$\(CURDIR\)\/objs$'
+    line: '\1rm -rf $(CURDIR)/objs'
+    backrefs: yes
+
+- name: Modify debian rules to ignore dh_shlibdeps
+  lineinfile:
+    path: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
+    regexp: '(.+?)dh_shlibdeps \-a(.+)?$'
+    line: '\1dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info'
     backrefs: yes

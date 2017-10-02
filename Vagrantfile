@@ -3,7 +3,7 @@
 
 Vagrant.configure('2') do |config|
   config.vm.hostname = 'nginx'
-  config.vm.box = 'kapke/xenial64-lxc'
+  config.vm.box = 'plumelo/xenial64'
 
   config.ssh.forward_agent = true
 
@@ -12,7 +12,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provision 'ansible' do |ansible|
-    ansible.playbook = 'test/test.yml'
+    ansible.playbook = 'test/purge.yml'
     # ansible.galaxy_role_file  = 'provision/galaxy.yml'
   end
 end
