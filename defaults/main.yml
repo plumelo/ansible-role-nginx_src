@@ -6,6 +6,7 @@ _nginx_src_deps:
   - build-essential
 
 nginx_src_deps: []
+nginx_src_libs: []
 
 nginx_src_modules: []
 nginx_src_args: []
