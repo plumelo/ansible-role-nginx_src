@@ -1,6 +1,25 @@
 ---
+
 - name: Build dependencies
   apt: pkg=nginx state=build-dep
+
+- name: Nginx preconfigure
+  shell: ./configure
+  args:
+    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
+  when: nginx_preconfigure
+
+- name: Configure modules
+  shell: "./configure {{ item.configure }}"
+  args:
+    chdir: '{{ nginx_src_build_path}}/{{  item.name }}'
+  with_items: "{{ nginx_src_libs }}"
+
+- name: Compile libs
+  make:
+    chdir: '{{ nginx_src_build_path }}/{{ item.name }}'
+    target: "{{ item.install|default(False)|ternary('install',omit) }}"
+  with_items: "{{ nginx_src_libs }}"
 
 - name: Build
   shell: 'yes | dpkg-buildpackage -b'
