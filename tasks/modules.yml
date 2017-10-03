@@ -1,7 +1,12 @@
 ---
+
 - name: Download modules
   unarchive: src="{{ item.url }}" dest='{{ nginx_src_build_path}}/{{  item.name }}' remote_src=yes extra_opts='--strip-components=1'
   with_items: "{{ nginx_src_modules }}"
+
+- name: Download modules libs (if any)
+  unarchive: src="{{ item.url }}" dest='{{ nginx_src_build_path}}/{{  item.name }}' remote_src=yes extra_opts='--strip-components=1'
+  with_items: "{{ nginx_src_libs }}"
 
 - name: Download modules deps (if any)
   unarchive: src="{{ item.1.url }}" dest='{{ nginx_src_build_path }}/{{ item.0.name }}/{{ item.1.name }}' remote_src=yes extra_opts='--strip-components=1'
@@ -9,26 +14,6 @@
     - "{{ nginx_src_modules }}"
     - deps
     - skip_missing: true
-
-- name: Nginx preconfigure
-  shell: ./configure
-  args:
-    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
-  when: nginx_preconfigure
-
-- name: Configure modules
-  shell: "./configure {{ item.make.configure }}"
-  args:
-    chdir: '{{ nginx_src_build_path}}/{{  item.name }}'
-  with_items: "{{ nginx_src_modules }}"
-  when: item.make is defined and item.make.configure|default(False)
-
-- name: Compile
-  make:
-    chdir: '{{ nginx_src_build_path }}/{{ item.name }}'
-    target: install
-  with_items: "{{ nginx_src_modules }}"
-  when: item.make is defined and item.make.install|default(false)
 
 - name: Modify debian rules to build with modules
   lineinfile:
