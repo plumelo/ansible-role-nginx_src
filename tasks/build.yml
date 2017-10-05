@@ -24,6 +24,7 @@
     target: "{{ item.make| default(omit) }}"
   when: item.make is defined
   with_items: "{{ nginx_src_libs }}"
+  notify: reload libraries
 
 - name: Build
   shell: 'yes | dpkg-buildpackage -b'

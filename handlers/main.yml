@@ -3,3 +3,6 @@
     state: restarted
     daemon_reload: yes
     name: redis.service
+
+- name: reload libraries
+  command: /sbin/ldconfig
