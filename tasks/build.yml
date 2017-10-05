@@ -1,6 +1,30 @@
 ---
+
 - name: Build dependencies
   apt: pkg=nginx state=build-dep
+
+- name: Nginx preconfigure
+  shell: './debian/rules config.env.nginx && rm config.env.nginx && mv debian/build-nginx debian/preconfigure-nginx  && cd debian/preconfigure-nginx && ./configure'
+  args:
+    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
+    creates: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/preconfigure-nginx/Makefile'
+  when: nginx_preconfigure
+
+- name: Configure libs
+  shell: "./configure {{ item.configure }}"
+  args:
+    chdir: '{{ nginx_src_build_path}}/{{  item.name }}'
+    creates: '{{ nginx_src_build_path}}/{{  item.name }}/Makefile'
+  when: item.configure is defined
+  with_items: "{{ nginx_src_libs }}"
+
+- name: Compile libs
+  make:
+    chdir: '{{ nginx_src_build_path }}/{{ item.name }}'
+    target: "{{ item.make| default(omit) }}"
+  when: item.make is defined
+  with_items: "{{ nginx_src_libs }}"
+  notify: reload libraries
 
 - name: Build
   shell: 'yes | dpkg-buildpackage -b'

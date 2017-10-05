@@ -5,9 +5,9 @@
 
 - name: Ensure APT official nginx repository (mainline)
   apt_repository: repo="deb http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx" update_cache=yes
+
 - name: Ensure APT official nginx repository (mainline)
   apt_repository: repo="deb-src http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx" update_cache=yes
-
 
 - name: Install deps
   apt: name='{{ item }}' state=present
@@ -19,6 +19,10 @@
 - name: Create build modules directories
   file: path="{{ nginx_src_build_path }}/{{ item.name }}" state=directory owner=_apt group=root mode=0775
   with_items: "{{ nginx_src_modules }}"
+
+- name: Create build modules libs directories (if any)
+  file: path="{{ nginx_src_build_path }}/{{ item.name }}" state=directory owner=_apt group=root mode=0775
+  with_items: "{{ nginx_src_libs }}"
 
 - name: Create build modules deps directories (if any)
   file: path="{{ nginx_src_build_path }}/{{ item.0.name }}/{{ item.1.name }}" state=directory owner=_apt group=root mode=0775
