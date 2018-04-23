@@ -8,7 +8,7 @@
   args:
     chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
     creates: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/preconfigure-nginx/Makefile'
-  when: nginx_preconfigure
+  when: nginx_src_preconfigure
 
 - name: Configure libs
   shell: "./configure {{ item.configure }}"

@@ -20,4 +20,4 @@ _nginx_src_dynamic_modules: "{{ nginx_src_modules| rejectattr('make','defined')|
 _nginx_src_args_modules: "{{ _nginx_src_static_modules + _nginx_src_dynamic_modules }}"
 _nginx_src_args: "{{  (_nginx_src_args_modules + nginx_src_args)| join(' ')   }}"
 
-nginx_preconfigure: False
+nginx_src_preconfigure: False
