@@ -13,4 +13,5 @@
   failed_when: no
 
 - name: Set fact for nginx install status
-  set_fact: _nginx_src_changed="{{ nginx_dpkg_check.changed or nginx_args_check.changed }}"
+  set_fact:
+    _nginx_src_changed: '{{ nginx_dpkg_check.changed or nginx_args_check.changed }}'

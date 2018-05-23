@@ -20,7 +20,7 @@
         url: https://github.com/openresty/array-var-nginx-module/archive/v0.05.tar.gz
 
   roles:
-    - role: ansible-role-nginx_src
+    - role: plumelo.nginx_src
 
   tasks:
     - shell: nginx -V

@@ -1,17 +1,29 @@
 ---
 
 - name: Download modules
-  unarchive: src="{{ item.url }}" dest='{{ nginx_src_build_path}}/{{  item.name }}' remote_src=yes extra_opts='--strip-components=1'
-  with_items: "{{ nginx_src_modules }}"
+  unarchive:
+    src: '{{ item.url }}'
+    dest: '{{ nginx_src_build_path}}/{{  item.name }}'
+    remote_src: yes
+    extra_opts: '--strip-components=1'
+  with_items: '{{ nginx_src_modules }}'
 
 - name: Download modules libs (if any)
-  unarchive: src="{{ item.url }}" dest='{{ nginx_src_build_path}}/{{  item.name }}' remote_src=yes extra_opts='--strip-components=1'
-  with_items: "{{ nginx_src_libs }}"
+  unarchive:
+    src: '{{ item.url }}'
+    dest: '{{ nginx_src_build_path}}/{{  item.name }}'
+    remote_src: yes
+    extra_opts: '--strip-components=1'
+  with_items: '{{ nginx_src_libs }}'
 
 - name: Download modules deps (if any)
-  unarchive: src="{{ item.1.url }}" dest='{{ nginx_src_build_path }}/{{ item.0.name }}/{{ item.1.name }}' remote_src=yes extra_opts='--strip-components=1'
+  unarchive:
+    src: '{{ item.1.url }}'
+    dest: '{{ nginx_src_build_path }}/{{ item.0.name }}/{{ item.1.name }}'
+    remote_src: yes
+    extra_opts: '--strip-components=1'
   with_subelements:
-    - "{{ nginx_src_modules }}"
+    - '{{ nginx_src_modules }}'
     - deps
     - skip_missing: true
 

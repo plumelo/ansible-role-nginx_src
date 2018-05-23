@@ -18,7 +18,7 @@
         url: https://github.com/wandenberg/nginx-selective-cache-purge-module/archive/0.7.0.tar.gz
 
   roles:
-    - role: ansible-role-nginx_src
+    - role: plumelo.nginx_src
   pre_tasks:
     - name: Apt install redis-server
       apt: pkg=redis-server
