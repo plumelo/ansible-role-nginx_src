@@ -1,18 +1,18 @@
 ---
 
-- include: check.yml
+- import_tasks: check.yml
 
-- include: deps.yml
+- import_tasks: deps.yml
   when: _nginx_src_changed
 
-- include: modules.yml
+- import_tasks: modules.yml
   when: _nginx_src_changed
 
-- include: build.yml
+- import_tasks: build.yml
   when: _nginx_src_changed
 
-- include: install.yml
+- import_tasks: install.yml
   when: _nginx_src_changed
 
-- include: cleanup.yml
-  when: _nginx_src_changed and nginx_src_cleanup|default(False)
+- import_tasks: cleanup.yml
+  when: _nginx_src_changed and nginx_src_cleanup|default(false)

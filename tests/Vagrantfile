@@ -12,7 +12,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provision 'ansible' do |ansible|
-    ansible.playbook = 'test/purge.yml'
-    # ansible.galaxy_role_file  = 'provision/galaxy.yml'
+    ansible.playbook = 'purge.yml'
+    ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python3' }
   end
 end

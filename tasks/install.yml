@@ -1,14 +1,22 @@
 ---
+
 - name: List folders
   shell: ls -al {{ nginx_src_build_path }}/
 
 - name: Install nginx package
-  apt: deb="{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~{{ ansible_distribution_release }}_amd64.deb" force=yes
+  apt:
+    deb: '{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~{{ ansible_distribution_release }}_amd64.deb'
+    force: yes
 
 - name: Hold installed nginx
-  dpkg_selections: name=nginx selection=hold
+  dpkg_selections:
+    name: nginx
+    selection: hold
 
 - name: Install modules
-  copy: src="{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/objs/{{ item.name }}.so" dest="/etc/nginx/modules/" remote_src=yes
-  when: item.dynamic|default(False)
-  with_items: "{{ nginx_src_modules }}"
+  copy:
+    src: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/objs/{{ item.name }}.so'
+    dest: '/etc/nginx/modules/'
+    remote_src: yes
+  when: item.dynamic|default(false)
+  with_items: '{{ nginx_src_modules }}'
