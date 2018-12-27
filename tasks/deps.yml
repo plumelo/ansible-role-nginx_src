@@ -63,7 +63,7 @@
   command: 'apt source nginx={{ nginx_src_version }}'
   register: apt_src_cmd
   changed_when: apt_src_cmd.stdout.find('already downloaded file') < 0
-  env:
+  environment:
     LC_ALL: 'en_US.UTF-8'
   args:
     chdir: '{{ nginx_src_build_path }}'
