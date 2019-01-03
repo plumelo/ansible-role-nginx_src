@@ -16,17 +16,8 @@ nginx_src_args: []
 nginx_src_cc_opt: ""
 nginx_src_ld_opt: ""
 
-_nginx_src_static_modules: |
-  "{{ nginx_src_modules| rejectattr('make','defined')
-  | rejectattr('dynamic','defined')
-  | map(attribute='name')
-  | map('regex_replace', '(.*)', '--add-module=../../../\\1')| list }}"
-_nginx_src_dynamic_modules: |
-  "{{ nginx_src_modules| rejectattr('make','defined')
-  | selectattr('dynamic','defined')
-  | selectattr('dynamic')
-  | map(attribute='name')
-  | map('regex_replace', '(.*)', '--add-dynamic-module=../../../\\1')| list }}"
+_nginx_src_static_modules: "{{ nginx_src_modules| rejectattr('make','defined')| rejectattr('dynamic','defined')| map(attribute='name')| map('regex_replace', '(.*)', '--add-module=../../../\\1')| list  }}"
+_nginx_src_dynamic_modules: "{{ nginx_src_modules| rejectattr('make','defined')| selectattr('dynamic','defined')| selectattr('dynamic')| map(attribute='name')| map('regex_replace', '(.*)', '--add-dynamic-module=../../../\\1')| list  }}"
 
 _nginx_src_args_modules: "{{ _nginx_src_static_modules + _nginx_src_dynamic_modules }}"
 
