@@ -4,10 +4,16 @@
   apt: pkg=nginx state=build-dep
 
 - name: Nginx preconfigure
-  shell: './debian/rules config.env.nginx && rm config.env.nginx && mv debian/build-nginx debian/preconfigure-nginx  && cd debian/preconfigure-nginx && ./configure'
+  shell: >
+    './debian/rules config.env.nginx
+    && rm config.env.nginx
+    && mv debian/build-nginx debian/preconfigure-nginx
+    && cd debian/preconfigure-nginx && ./configure'
   args:
     chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
-    creates: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/preconfigure-nginx/Makefile'
+    creates: >-
+      '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}
+      /debian/preconfigure-nginx/Makefile'
   when: nginx_src_preconfigure
 
 - name: Configure libs

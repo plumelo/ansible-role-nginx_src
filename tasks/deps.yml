@@ -7,13 +7,19 @@
 
 - name: Ensure APT official nginx repository (mainline)
   apt_repository:
-    repo: 'deb http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx'
-    update_cache: yes
+    repo: >-
+      'deb http://nginx.org/packages/mainline/
+      {{ ansible_distribution|lower }}
+      / {{ ansible_distribution_release }} nginx'
+    update_cache: true
 
 - name: Ensure APT official nginx repository (mainline)
   apt_repository:
-    repo: 'deb-src http://nginx.org/packages/mainline/{{ ansible_distribution|lower }}/ {{ ansible_distribution_release }} nginx'
-    update_cache: yes
+    repo: >-
+      'deb-src http://nginx.org/packages/mainline
+      /{{ ansible_distribution|lower }}
+      / {{ ansible_distribution_release }} nginx'
+    update_cache: true
 
 - name: Install deps
   apt:
