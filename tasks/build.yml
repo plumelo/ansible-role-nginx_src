@@ -19,8 +19,8 @@
 - name: Configure libs
   shell: './configure {{ item.configure }}'
   args:
-    chdir: '{{ nginx_src_build_path}}/{{  item.name }}'
-    creates: '{{ nginx_src_build_path}}/{{  item.name }}/Makefile'
+    chdir: '{{ nginx_src_build_path }}/{{  item.name }}'
+    creates: '{{ nginx_src_build_path }}/{{  item.name }}/Makefile'
   when: item.configure is defined
   with_items: '{{ nginx_src_libs }}'
 
