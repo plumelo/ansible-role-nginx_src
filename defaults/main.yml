@@ -1,10 +1,11 @@
 ---
 
-nginx_src_version: 1.13.3
+nginx_src_version: 1.15.8
 nginx_src_build_path: '/root/nginx-src'
 
 nginx_mainline_deb: 'deb http://nginx.org/packages/mainline'
 nginx_mainline_src: 'deb-src http://nginx.org/packages/mainline'
+nginx_dir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
 
 _nginx_src_deps:
   - dpkg-dev

@@ -5,10 +5,7 @@
 
 - name: Install nginx package
   apt:
-    deb: >-
-      '{{ nginx_src_build_path }}/
-      nginx_{{ nginx_src_version }}-1~
-      {{ ansible_distribution_release }}_amd64.deb'
+    deb: '{{ nginx_src_build_path }}/nginx_{{ nginx_src_version }}-1~{{ ansible_distribution_release }}_amd64.deb'
     force: true
 
 - name: Hold installed nginx

@@ -3,7 +3,7 @@
 - name: Download modules
   unarchive:
     src: '{{ item.url }}'
-    dest: '{{ nginx_src_build_path }}/{{  item.name }}'
+    dest: '{{ nginx_src_build_path }}/{{ item.name }}'
     remote_src: true
     extra_opts: '--strip-components=1'
   with_items: '{{ nginx_src_modules }}'
@@ -11,7 +11,7 @@
 - name: Download modules libs (if any)
   unarchive:
     src: '{{ item.url }}'
-    dest: '{{ nginx_src_build_path }}/{{  item.name }}'
+    dest: '{{ nginx_src_build_path }}/{{ item.name }}'
     remote_src: true
     extra_opts: '--strip-components=1'
   with_items: '{{ nginx_src_libs }}'
@@ -29,31 +29,25 @@
 
 - name: Modify debian rules to build with modules
   lineinfile:
-    path: >-
-      '{{ nginx_src_build_path }}/
-      nginx-{{ nginx_src_version }}/debian/rules'
-    regexp: 'CFLAGS="(.+?)\.\/configure(.+?)-\-\prefix=(.+?){{ item }}$'
-    line: >
-      'CFLAGS="{{ nginx_src_cc_opt }}"
-      LDFLAGS="{{ nginx_src_ld_opt }}" ./configure {{ _nginx_src_args }}
-      --prefix=\3{{ item }}'
-    backrefs: true
+    path: '{{ nginx_dir }}/debian/rules'
+    regexp: 'CFLAGS="(.+?)"\.\/configure(.+?)-\-\prefix=(.+?) --with-ld-opt="(.+?){{ item }}$'
+
+    line: 'CFLAGS="{{ nginx_src_cc_opt }}" ./configure {{ _nginx_src_args }} --prefix=\3 --with-ld-opt="{{ nginx_src_ld_opt }}\4{{ item }}'
+    backrefs: yes
   with_items:
     - '"'
     - "debug"
 
 - name: Modify debian rules to cleanup build folders
   lineinfile:
-    path: >
-      '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
+    path: '{{ nginx_dir }}/debian/rules'
     regexp: '(.+?)rm \-r?f \$\(CURDIR\)\/objs$'
     line: '\1rm -rf $(CURDIR)/objs'
     backrefs: true
 
 - name: Modify debian rules to ignore dh_shlibdeps
   lineinfile:
-    path: >-
-      '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/rules'
+    path: '{{ nginx_dir }}/debian/rules'
     regexp: '(.+?)dh_shlibdeps \-a(.+)?$'
     line: '\1dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info'
     backrefs: true

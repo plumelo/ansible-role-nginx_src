@@ -6,16 +6,18 @@
     nginx_src_preconfigure: true
     nginx_src_deps:
       - libhiredis-dev
-    nginx_src_cc_opt: "-I /usr/local/include/hiredis"
-    nginx_src_ld_opt: "-L /usr/local/lib"
+    nginx_src_cc_opt: "-I {{ nginx_src_build_path }}/redis_nginx_adapter"
+    nginx_src_ld_opt: "-I {{ nginx_src_build_path }}/redis_nginx_adapter"
     nginx_src_libs:
       - name: redis_nginx_adapter
-        url: https://github.com/wandenberg/redis_nginx_adapter/archive/1.0.1.tar.gz
-        configure: "--with-nginx-dir={{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/debian/preconfigure-nginx"
-        make: install
+        url: https://github.com/wandenberg/redis_nginx_adapter/archive/1.2.0.tar.gz
+        configure: --with-nginx-dir={{ nginx_dir }}/debian/preconfigure-nginx --prefix=/usr
+        make:
+          params:
+            CPPFLAGS: '-fPIC'
     nginx_src_modules:
       - name: nginx-selective-cache-purge-module
-        url: https://github.com/wandenberg/nginx-selective-cache-purge-module/archive/0.7.0.tar.gz
+        url: https://github.com/wandenberg/nginx-selective-cache-purge-module/archive/0.8.0.tar.gz
 
   roles:
     - role: plumelo.nginx_src
@@ -23,7 +25,11 @@
     - name: Apt install redis-server
       apt: pkg=redis-server
       register: apt_redis_result
+      until: apt_redis_result
+      retries: 2
+      delay: 2
       ignore_errors: true
+
 
     - name: Modify redis.config
       lineinfile:
