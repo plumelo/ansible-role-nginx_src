@@ -4,13 +4,14 @@
   command: dpkg -s nginx
   register: nginx_dpkg_check
   changed_when: not ("hold ok installed" in nginx_dpkg_check.stdout and nginx_src_version in nginx_dpkg_check.stdout)
-  failed_when: no
+  failed_when: false
 
 - name: Check nginx compile args
   shell: nginx -V
   register: nginx_args_check
   changed_when: not (_nginx_src_args in nginx_args_check.stdout or _nginx_src_args in nginx_args_check.stderr)
-  failed_when: no
+  failed_when: false
+
 
 - name: Set fact for nginx install status
   set_fact:

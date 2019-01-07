@@ -17,9 +17,8 @@
 
 - name: Install deps
   apt:
-    name: '{{ item }}'
+    name: '{{ _nginx_src_deps + nginx_src_deps }}'
     state: present
-  with_items: '{{ _nginx_src_deps + nginx_src_deps }}'
 
 - name: Create build directory
   file:

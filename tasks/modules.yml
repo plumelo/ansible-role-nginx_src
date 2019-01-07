@@ -28,15 +28,17 @@
     - skip_missing: true
 
 - name: Modify debian rules to build with modules
-  lineinfile:
+  replace:
     path: '{{ nginx_dir }}/debian/rules'
-    regexp: 'CFLAGS="(.+?)"\.\/configure(.+?)-\-\prefix=(.+?) --with-ld-opt="(.+?){{ item }}$'
-
-    line: 'CFLAGS="{{ nginx_src_cc_opt }}" ./configure {{ _nginx_src_args }} --prefix=\3 --with-ld-opt="{{ nginx_src_ld_opt }}\4{{ item }}'
-    backrefs: yes
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
   with_items:
-    - '"'
-    - "debug"
+    - regexp: '\.\/configure(.+?)\-\-prefix'
+      replace: './configure {{ _nginx_src_args }} --prefix'
+    - regexp: '\-\-with-cc\-opt="([^\$]+?)?\$'
+      replace: '--with-cc-opt="{{ nginx_src_cc_opt }} $'
+    - regexp: '\-\-with-ld\-opt="([^\$]+?)?\$'
+      replace: '--with-ld-opt="{{ nginx_src_ld_opt }} $'
 
 - name: Modify debian rules to cleanup build folders
   lineinfile:
