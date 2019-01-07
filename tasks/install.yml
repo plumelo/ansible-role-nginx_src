@@ -15,9 +15,7 @@
 
 - name: Install modules
   copy:
-    src: >-
-      '{{ nginx_src_build_path }}/
-      nginx-{{ nginx_src_version }}/objs/{{ item.name }}.so'
+    src: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}/objs/{{ item.name }}.so'
     dest: '/etc/nginx/modules/'
     remote_src: true
   when: item.dynamic|default(false)
