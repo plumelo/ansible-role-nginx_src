@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: localhost
   become: true
   vars:
     _nginx_src_args: '--add-module=../../../ngx_cache_purge'
