@@ -1,35 +1,21 @@
 ---
-conditions: v1
-dist: xenial
 
 language: python
-python: "3.6"
-
-cache:
-  pip: true
+sudo: required
+dist: xenial
+cache: pip
+python:
+  - 3.7
 
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq python-apt python-pycurl
-# Use the new container infrastructure
-sudo: required
-
-# Install ansible
-# addons:
-#   apt:
-#     packages:
-#       - python-pip
-#       - python-pycurl
 
 install:
-  - pip install ansible ansible-lint
-  - ansible --version
+  - sudo apt-get -qq update
+  - pip install ansible
 
 script:
-  - ansible-lint tasks/main.yml
-  # - ansible-playbook -i tests/inventory --syntax-check --list-tasks tests/test.yml
-  # - ansible-playbook -i tests/inventory --connection=local --sudo -vvvv tests/test.yml -u root
-  # - ansible-playbook -i tests/inventory --connection=local --sudo -vvvv tests/test.yml -u root
   - ansible-playbook -i tests/inventory --syntax-check --list-tasks tests/test.yml
   - ansible-playbook -i tests/inventory --connection=local --sudo -vvvv tests/test.yml -u root
   - >
