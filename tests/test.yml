@@ -38,7 +38,8 @@
     - debug:
         var: nginx_modules_register
 
-    - assert:
+    - name: Verify modules
+      assert:
         that:
           - "'{{ item.name }}' in nginx_modules_register.stderr"
         msg: "Module must be added"

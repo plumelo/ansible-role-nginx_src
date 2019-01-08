@@ -1,10 +1,20 @@
 ---
 
 - name: Build dependencies
-  apt: pkg=nginx state=build-dep
+  apt:
+    name: nginx
+    state: build-dep
+  register: apt_res
+  retries: 2
+  until: apt_res | success
 
 - name: Nginx preconfigure
-  shell: './debian/rules config.env.nginx && rm config.env.nginx && mv debian/build-nginx debian/preconfigure-nginx && cd debian/preconfigure-nginx && ./configure'
+  shell: >-
+    ./debian/rules config.env.nginx &&
+    rm config.env.nginx &&
+    mv debian/build-nginx debian/preconfigure-nginx &&
+    cd debian/preconfigure-nginx &&
+    ./configure
   args:
     chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
     creates: '{{ nginx_dir }}/debian/preconfigure-nginx/Makefile'
