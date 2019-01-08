@@ -16,7 +16,7 @@
     cd debian/preconfigure-nginx &&
     ./configure
   args:
-    chdir: '{{ nginx_src_build_path }}/nginx-{{ nginx_src_version }}'
+    chdir: '{{ nginx_dir }}'
     creates: '{{ nginx_dir }}/debian/preconfigure-nginx/Makefile'
   when: nginx_src_preconfigure
 
