@@ -26,7 +26,7 @@
       apt: pkg=redis-server
       register: apt_redis_result
       retries: 2
-      until: apt_redis_result.rc == 0
+      until: result|success
       ignore_errors: true
 
 
