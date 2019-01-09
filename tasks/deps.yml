@@ -6,7 +6,7 @@
     state: present
   register: apt_repo_res
   retries: 2
-  until: result|success
+  until: apt_repo_res|success
 
 - name: Ensure APT official nginx repository (mainline)
   apt_repository:
@@ -28,7 +28,7 @@
     state: present
   register: apt_deps_res
   retries: 2
-  until: result|success
+  until: apt_deps_res|success
 
 - name: Create build directory
   file:
