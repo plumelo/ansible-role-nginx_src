@@ -4,9 +4,9 @@
   apt_key:
     url: 'http://nginx.org/keys/nginx_signing.key'
     state: present
-  register: apt_res
+  register: apt_repo_res
   retries: 2
-  until: apt_res | success
+  until: apt_repo_res.rc == 0
 
 - name: Ensure APT official nginx repository (mainline)
   apt_repository:
@@ -26,9 +26,10 @@
   apt:
     name: '{{ _nginx_src_deps + nginx_src_deps }}'
     state: present
-  register: apt_res
+  register: apt_deps_res
   retries: 2
-  until: apt_res | success
+  until: apt_deps_res.rc == 0
+  ignore_errors: true
 
 - name: Create build directory
   file:
