@@ -25,9 +25,8 @@
     - name: Apt install redis-server
       apt: pkg=redis-server
       register: apt_redis_result
-      until: apt_redis_result
       retries: 2
-      delay: 2
+      until: apt_redis_result.rc == 0
       ignore_errors: true
 
 
