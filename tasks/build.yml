@@ -6,7 +6,7 @@
     state: build-dep
   register: apt_build_dep_res
   retries: 2
-  until: result|success
+  until: apt_build_dep_res|success
 
 - name: Nginx preconfigure
   shell: >-
