@@ -3,12 +3,9 @@
 - hosts: all
   become: true
   vars:
-    _nginx_src_args: >-
-      --add-module=../../../ngx_cache_purge
-      --add-module=../../../ngx_auto_lib
-      --add-module=../../../ngx_http_accounting_module
-      --add-module=../../../ngx_devel_kit
-      --add-module=../../../array-var-nginx-module
+    nginx_src_deps:
+      - uuid-dev
+    nginx_src_preconfigure: true
     nginx_src_modules:
       - name: ngx_cache_purge
         url: https://github.com/FRiCKLE/ngx_cache_purge/archive/2.3.tar.gz
@@ -24,6 +21,16 @@
 
       - name: array-var-nginx-module
         url: https://github.com/openresty/array-var-nginx-module/archive/v0.05.tar.gz
+
+      - name: ngx_pagespeed
+        url: https://github.com/pagespeed/ngx_pagespeed/archive/v1.13.35.2-stable.tar.gz
+        dynamic: true
+        deps:
+          - name: psol
+            url: https://dl.google.com/dl/page-speed/psol/1.13.35.2-x64.tar.gz
+
+    nginx_extra_root_params:
+      - load_module modules/ngx_pagespeed.so
 
   roles:
     - role: plumelo.nginx_src
